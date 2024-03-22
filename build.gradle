@@ -124,7 +124,7 @@ dependencies {
     implementation "com.amazonaws:aws-java-sdk-s3:$amazonS3Version"
 
     runtimeOnly "org.slf4j:slf4j-log4j12:$slf4jVersion"
-    runtimeOnly com.amazonaws:aws-java-sdk-s3:$amazonS3Version\"
+    runtimeOnly "com.amazonaws:aws-java-sdk-s3:$amazonS3Version"
 
     compileOnly "org.apache.kafka:connect-api:$kafkaVersion"
     compileOnly "org.apache.kafka:connect-runtime:$kafkaVersion"
