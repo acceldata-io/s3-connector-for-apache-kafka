@@ -35,7 +35,7 @@ plugins {
 }
 
 group = "io.aiven"
-version = hasProperty("module_version") ? "$project.module_version" : 'unknown'
+version="2.6.0.3.2.2.0-SNAPSHOT"
 
 repositories {
     jcenter()
@@ -124,6 +124,7 @@ dependencies {
     implementation "com.amazonaws:aws-java-sdk-s3:$amazonS3Version"
 
     runtimeOnly "org.slf4j:slf4j-log4j12:$slf4jVersion"
+    runtimeOnly com.amazonaws:aws-java-sdk-s3:$amazonS3Version\"
 
     compileOnly "org.apache.kafka:connect-api:$kafkaVersion"
     compileOnly "org.apache.kafka:connect-runtime:$kafkaVersion"
