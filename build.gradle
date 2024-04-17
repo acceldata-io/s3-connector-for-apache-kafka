@@ -35,7 +35,7 @@ plugins {
 }
 
 group = "io.aiven"
-version="2.6.0.3.2.2.0-SNAPSHOT"
+version="2.6.0"
 
 repositories {
     jcenter()
