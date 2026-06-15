@@ -40,8 +40,8 @@ plugins {
 group = "io.aiven"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
     withJavadocJar()
     withSourcesJar()
@@ -73,7 +73,7 @@ repositories {
 }
 
 ext {
-    kafkaVersion = "1.1.0"
+    kafkaVersion = "4.3.0"
     // Compatible with Kafka version:
     // https://docs.confluent.io/current/installation/versions-interoperability.html
     confluentPlatformVersion = "4.1.4"
