@@ -68,14 +68,24 @@ jacoco {
 }
 
 repositories {
-    mavenCentral()
-    // For kafka-avro-serializer and kafka-connect-avro-converter
-    maven {
-        url "https://packages.confluent.io/maven"
+    if (project.hasProperty('mavenProxyUrl')) {
+        maven { url mavenProxyUrl }
+    } else {
+        mavenCentral()
+        // For kafka-avro-serializer and kafka-connect-avro-converter
+        maven {
+            url "https://packages.confluent.io/maven"
+        }
     }
 }
 
 ext {
+    mavenUrl = project.hasProperty('mavenUrl') ? project.mavenUrl : ''
+    snapMavenUrl = project.hasProperty('snapMavenUrl') ? project.snapMavenUrl : ''
+    mavenUsername = project.hasProperty('mavenUsername') ? project.mavenUsername : ''
+    mavenPassword = project.hasProperty('mavenPassword') ? project.mavenPassword : ''
+    mavenProxyUrl = project.hasProperty('mavenProxyUrl') ? project.mavenProxyUrl : ''
+
     kafkaVersion = "1.1.0"
     // Compatible with Kafka version:
     // https://docs.confluent.io/current/installation/versions-interoperability.html
@@ -327,24 +337,38 @@ publishing {
                 }
             }
         }
+
+        shadow(MavenPublication) {
+            groupId = "io.aiven"
+            artifactId = "aiven-kafka-connect-s3"
+            version = getVersion()
+            artifact tasks.shadowJar
+        }
     }
 
-    repositories {
-        maven {
-            name="sonatype"
-
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-            credentials(PasswordCredentials)
+    if (project.hasProperty("mavenUrl") || project.hasProperty("snapMavenUrl")) {
+        repositories {
+            maven {
+                /*
+                 * Add to ~/.gradle/gradle.properties to publish to Nexus:
+                 * mavenUrl=https://repo1.acceldata.dev/repository/odp-staging-release/
+                 * snapMavenUrl=https://repo1.acceldata.dev/repository/odp-staging-snapshot/
+                 */
+                url = version.endsWith('SNAPSHOT') ? snapMavenUrl : mavenUrl
+                credentials {
+                    username = mavenUsername
+                    password = mavenPassword
+                }
+            }
         }
     }
 }
 
-signing {
-    sign publishing.publications.maven
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKey, signingPassword)
+if (!version.endsWith('SNAPSHOT')) {
+    signing {
+        sign publishing.publications.maven
+        def signingKey = findProperty("signingKey")
+        def signingPassword = findProperty("signingPassword")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
 }
