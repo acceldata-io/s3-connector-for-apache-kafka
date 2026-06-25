@@ -36,7 +36,7 @@ plugins {
 
 group = "io.aiven"
 version = hasProperty("module_version") ? "$project.module_version" : 'unknown'
-version="2.6.0-8"
+version="2.6.0.3.2.3.7-2"
 
 repositories {
     jcenter()
