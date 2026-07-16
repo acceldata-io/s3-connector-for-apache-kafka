@@ -289,9 +289,9 @@ processResources {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = getGroup()
-            artifactId = "s3-connector-for-apache-kafka"
-            version = getVersion()
+            groupId = "io.aiven"
+            artifactId = "aiven-kafka-connect-s3"
+            version = project.version
 
             from components.java
 
@@ -338,6 +338,19 @@ publishing {
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
             credentials(PasswordCredentials)
+        }
+
+        maven {
+            def releasesRepoUrl = project.hasProperty('mavenUrl') ? project.mavenUrl
+                    : 'https://repo1.acceldata.dev/repository/odp-staging-release/'
+            def snapshotsRepoUrl = project.hasProperty('snapMavenUrl') ? project.snapMavenUrl
+                    : 'https://repo1.acceldata.dev/repository/odp-staging-snapshot/'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = project.findProperty('mavenUsername') ?: ''
+                password = project.findProperty('mavenPassword') ?: ''
+            }
         }
     }
 }
